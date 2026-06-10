@@ -24,6 +24,11 @@ class KategoriSampahController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'nama_kategori' => 'required|string|max:255',
+            'koin_per_kg' => 'required|integer|min:1',
+        ]);
+
         KategoriSampah::create([
             'nama_kategori' => $request->nama_kategori,
             'koin_per_kg' => $request->koin_per_kg
@@ -34,7 +39,7 @@ class KategoriSampahController extends Controller
             ->with('success', 'Data berhasil ditambahkan');
     }
 
-    public function edit($id)
+    public function edit(int $id)
     {
         $kategori = KategoriSampah::findOrFail($id);
 
@@ -44,8 +49,13 @@ class KategoriSampahController extends Controller
         );
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request,int $id)
     {
+        $request->validate([
+            'nama_kategori' => 'required|string|max:255',
+            'koin_per_kg' => 'required|integer|min:1',
+        ]);
+
         $kategori = KategoriSampah::findOrFail($id);
 
         $kategori->update([
@@ -58,7 +68,7 @@ class KategoriSampahController extends Controller
             ->with('success', 'Data berhasil diupdate');
     }
 
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $kategori = KategoriSampah::findOrFail($id);
 

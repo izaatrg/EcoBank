@@ -17,4 +17,9 @@ class Reward extends Model
         'stok',
         'gambar'
     ];
+
+    public function penukaranReward()
+    {
+        return $this->hasMany(PenukaranReward::class, 'reward_id');
+    }
 }
