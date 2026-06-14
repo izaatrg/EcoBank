@@ -29,7 +29,7 @@
                         <td class="px-6 py-4">{{ $s->warga->email ?? '-' }}</td>
                         <td class="px-6 py-4">{{ $s->total_koin }}</td>
                         <td class="px-6 py-4">
-                            <a href="{{ route('saldo.show', $s->warga_id) }}" class="inline-flex items-center rounded-2xl bg-slate-900 px-3 py-2 text-xs font-medium text-white">Detail</a>
+                            <a href="{{ route('admin.saldo.show', $s->warga_id) }}" class="inline-flex items-center rounded-2xl bg-slate-900 px-3 py-2 text-xs font-medium text-white">Detail</a>
                         </td>
                     </tr>
                     @empty

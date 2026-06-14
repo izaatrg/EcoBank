@@ -7,18 +7,30 @@ use App\Models\Reward;
 use App\Models\TransaksiSetoran;
 use App\Models\Penjemputan;
 use App\Models\PenukaranReward;
+use App\Models\BarangMasuk;
 
 class AdminController extends Controller
 {
     public function dashboard()
     {
+        // Calculate real statistics
+        $totalSampah = TransaksiSetoran::sum('berat');
+        $totalWarga = User::where('role', 'warga')->count();
+        $totalKoin = TransaksiSetoran::sum('total_koin');
+        $totalBarang = BarangMasuk::sum('jumlah');
+
+        // Get recent transactions
+        $recentTransaksi = TransaksiSetoran::with(['warga', 'kategori'])
+            ->latest()
+            ->take(5)
+            ->get();
+
         return view('admin.dashboard', [
-            'total_warga' => User::where('role', 'warga')->count(),
-            'total_petugas' => User::where('role', 'petugas')->count(),
-            'total_reward' => Reward::count(),
-            'total_transaksi' => TransaksiSetoran::count(),
-            'total_penjemputan' => Penjemputan::count(),
-            'total_penukaran' => PenukaranReward::count(),
+            'total_sampah' => $totalSampah,
+            'total_warga' => $totalWarga,
+            'total_koin' => $totalKoin,
+            'total_barang' => $totalBarang,
+            'recent_transaksi' => $recentTransaksi,
         ]);
     }
 }

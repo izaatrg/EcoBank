@@ -8,7 +8,7 @@
                 <h2 class="text-2xl font-semibold text-slate-900">Detail Saldo Koin</h2>
                 <p class="mt-1 text-sm text-slate-500">Informasi saldo dan rekalkulasi.</p>
             </div>
-            <a href="{{ route('saldo.index') }}" class="inline-flex items-center rounded-2xl bg-slate-200 px-4 py-2 text-sm font-medium text-slate-700">Kembali</a>
+            <a href="{{ route('admin.saldo.index') }}" class="inline-flex items-center rounded-2xl bg-slate-200 px-4 py-2 text-sm font-medium text-slate-700">Kembali</a>
         </div>
     </div>
 
@@ -19,7 +19,7 @@
             <div><strong>Saldo Terdaftar:</strong> {{ $saldo->total_koin }}</div>
             <div><strong>Saldo Dihitung dari Transaksi:</strong> {{ $calculated_total }}</div>
 
-            <form action="{{ route('saldo.recalculate', $saldo->warga_id) }}" method="POST">
+            <form action="{{ route('admin.saldo.recalculate', $saldo->warga_id) }}" method="POST">
                 @csrf
                 <button type="submit" class="mt-4 inline-flex items-center rounded-2xl bg-emerald-600 px-4 py-2 text-sm font-medium text-white">Rekalkulasi Saldo</button>
             </form>

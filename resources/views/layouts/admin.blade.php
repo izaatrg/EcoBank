@@ -22,6 +22,137 @@
             color: #1E5631 !important;
             font-weight: 700 !important;
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in { animation: fadeIn .35s ease-out; }
+
+        .admin-input {
+            width: 100%;
+            background: rgba(248, 250, 252, 0.8);
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            outline: none;
+            transition: border-color .2s, box-shadow .2s, background .2s;
+        }
+
+        .admin-input:focus {
+            border-color: #1E5631;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(30, 86, 49, 0.12);
+        }
+
+        .admin-btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: #1E5631;
+            color: #fff;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: background .2s, transform .15s, box-shadow .2s;
+        }
+
+        .admin-btn-primary:hover { background: #2D6A4F; box-shadow: 0 4px 14px rgba(30, 86, 49, 0.25); }
+        .admin-btn-primary:active { transform: scale(0.98); }
+        .admin-btn-primary.loading { opacity: 0.7; pointer-events: none; }
+
+        .admin-btn-ghost {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e2e8f0;
+            background: #fff;
+            color: #64748b;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .admin-btn-ghost:hover { background: #f8fafc; border-color: #1E5631; color: #1E5631; }
+
+        .admin-btn-outline {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            border: 2px solid #1E5631;
+            color: #1E5631;
+            background: transparent;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .admin-btn-outline:hover { background: #E8F9EE; }
+
+        .filter-pill {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #64748b;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .filter-pill:hover { border-color: #1E5631; color: #1E5631; }
+        .filter-pill-active { background: #1E5631; color: #fff; border-color: #1E5631; }
+
+        .toast-success {
+            background: #d1e7dd;
+            border: 1px solid #badbcc;
+            color: #0f5132;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            animation: fadeIn .3s ease-out;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.625rem;
+            border-radius: 9999px;
+            font-size: 0.625rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+        }
+
+        .status-emerald { background: #d1fae5; color: #065f46; }
+        .status-amber { background: #fef3c7; color: #92400e; }
+        .status-red { background: #fee2e2; color: #991b1b; }
+
+        .receipt-paper { position: relative; }
+        .receipt-paper::before,
+        .receipt-paper::after {
+            content: '';
+            display: block;
+            height: 8px;
+            background: linear-gradient(135deg, #fff 33.33%, transparent 33.33%) 0 0,
+                        linear-gradient(-135deg, #fff 33.33%, transparent 33.33%) 0 0;
+            background-size: 12px 12px;
+            background-color: #f8fafc;
+        }
     </style>
 </head>
 
@@ -61,13 +192,13 @@
                     <i class="fa-solid fa-money-bill-transfer w-5 text-center"></i> Tukar Koin
                 </a>
                 <div class="border-t border-emerald-200/50 my-4"></div>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-emerald-100/50 transition-all text-sm font-medium">
+                <a href="{{ route('admin.laporan.index') }}" class="{{ Request::routeIs('admin.laporan.*') ? 'sidebar-active' : 'hover:bg-emerald-100/50' }} flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm font-medium">
                     <i class="fa-solid fa-chart-simple w-5 text-center"></i> Laporan
                 </a>
-                <a href="{{ route('admin.transaksi.index') }}" class="{{ Request::routeIs('admin.transaksi.*') ? 'sidebar-active' : 'hover:bg-emerald-100/50' }} flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm font-medium">
+                <a href="{{ route('admin.riwayat_transaksi.index') }}" class="{{ Request::routeIs('admin.riwayat_transaksi.*') ? 'sidebar-active' : 'hover:bg-emerald-100/50' }} flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm font-medium">
                     <i class="fa-solid fa-clock-rotate-left w-5 text-center"></i> Riwayat Transaksi
                 </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-emerald-100/50 transition-all text-sm font-medium">
+                <a href="{{ route('admin.estruck.index') }}" class="{{ Request::routeIs('admin.estruck.*') ? 'sidebar-active' : 'hover:bg-emerald-100/50' }} flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm font-medium">
                     <i class="fa-solid fa-receipt w-5 text-center"></i> E-Struk
                 </a>
             </nav>
@@ -99,18 +230,18 @@
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <div class="relative">
+                    <form method="GET" action="{{ request()->url() }}" class="relative">
                         <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                        <input type="text"
+                        <input type="text" name="q" value="{{ request('q') }}"
                             placeholder="@yield('search_placeholder', 'Cari data...')"
                             class="bg-[#E8F9EE]/50 border border-transparent py-2 pl-10 pr-4 rounded-xl text-xs outline-none focus:bg-white focus:border-emerald-500 transition-all w-64 text-slate-700 placeholder-slate-400 font-medium">
-                    </div>
-                    <button class="w-9 h-9 flex items-center justify-center bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-emerald-600 hover:border-emerald-100 shadow-xs transition-all cursor-pointer">
+                    </form>
+                    <button onclick="showNotificationModal()" class="w-9 h-9 flex items-center justify-center bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-emerald-600 hover:border-emerald-100 shadow-xs transition-all cursor-pointer">
                         <i class="fa-regular fa-bell text-xs"></i>
                     </button>
-                    <button class="w-9 h-9 flex items-center justify-center bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-emerald-600 hover:border-emerald-100 shadow-xs transition-all cursor-pointer">
+                    <a href="{{ route('profile.edit') }}" class="w-9 h-9 flex items-center justify-center bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-emerald-600 hover:border-emerald-100 shadow-xs transition-all cursor-pointer">
                         <i class="fa-solid fa-gear text-xs"></i>
-                    </button>
+                    </a>
                 </div>
             </header>
 
@@ -119,6 +250,57 @@
             </main>
         </div>
     </div>
+
+    <!-- Notification Modal -->
+    <div id="notificationModal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-slate-800">Notifikasi</h3>
+                <button onclick="hideNotificationModal()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-3">
+                <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4">
+                    <p class="text-sm font-bold text-emerald-800">Sistem Berjalan Normal</p>
+                    <p class="text-xs text-emerald-600 mt-1">Semua fitur berfungsi dengan baik.</p>
+                </div>
+                <div class="bg-slate-50 border border-slate-100 rounded-xl p-4">
+                    <p class="text-sm font-bold text-slate-800">Belum Ada Notifikasi Baru</p>
+                    <p class="text-xs text-slate-500 mt-1">Anda akan menerima notifikasi saat ada aktivitas penting.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showNotificationModal() {
+            document.getElementById('notificationModal').classList.remove('hidden');
+            document.getElementById('notificationModal').classList.add('flex');
+        }
+
+        function hideNotificationModal() {
+            document.getElementById('notificationModal').classList.add('hidden');
+            document.getElementById('notificationModal').classList.remove('flex');
+        }
+
+        document.querySelectorAll('.admin-form[data-loading]').forEach(form => {
+            form.addEventListener('submit', function () {
+                const btn = form.querySelector('button[type="submit"]');
+                if (btn) {
+                    btn.classList.add('loading');
+                    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
+                }
+            });
+        });
+
+        document.querySelectorAll('.filter-pill').forEach(pill => {
+            pill.addEventListener('click', function () {
+                this.parentElement.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('filter-pill-active'));
+                this.classList.add('filter-pill-active');
+            });
+        });
+    </script>
 </body>
 
 </html>

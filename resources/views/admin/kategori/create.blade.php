@@ -9,7 +9,7 @@
 
     <h1>Tambah Kategori Sampah</h1>
 
-    <form action="{{ route('kategori.store') }}"
+    <form action="{{ route('admin.kategori.store') }}"
         method="POST">
 
         @csrf

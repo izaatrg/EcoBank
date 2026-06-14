@@ -5,7 +5,7 @@
 
 @if($errors->any())<div style="color:red"><ul>@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul></div>@endif
 
-<form method="POST" action="{{ route('transaksi.update',$transaksi->id) }}">
+<form method="POST" action="{{ route('admin.transaksi.update',$transaksi->id) }}">
     @csrf
     @method('PUT')
     <label>Warga</label><br>

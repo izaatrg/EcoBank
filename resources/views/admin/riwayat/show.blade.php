@@ -8,7 +8,7 @@
                 <h2 class="text-2xl font-semibold text-slate-900">Riwayat Koin - {{ $warga->name }}</h2>
                 <p class="mt-1 text-sm text-slate-500">Riwayat setoran (masuk) dan penukaran (keluar) koin.</p>
             </div>
-            <a href="{{ route('riwayat.index') }}" class="inline-flex items-center rounded-2xl bg-slate-200 px-4 py-2 text-sm font-medium text-slate-700">Kembali</a>
+            <a href="{{ route('admin.riwayat.index') }}" class="inline-flex items-center rounded-2xl bg-slate-200 px-4 py-2 text-sm font-medium text-slate-700">Kembali</a>
         </div>
     </div>
 

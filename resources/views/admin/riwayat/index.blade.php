@@ -27,7 +27,7 @@
                         <td class="px-6 py-4">{{ $w->name }}</td>
                         <td class="px-6 py-4">{{ $w->email }}</td>
                         <td class="px-6 py-4">
-                            <a href="{{ route('riwayat.show', $w->id) }}" class="inline-flex items-center rounded-2xl bg-slate-900 px-3 py-2 text-xs font-medium text-white">Lihat Riwayat</a>
+                            <a href="{{ route('admin.riwayat.show', $w->id) }}" class="inline-flex items-center rounded-2xl bg-slate-900 px-3 py-2 text-xs font-medium text-white">Lihat Riwayat</a>
                         </td>
                     </tr>
                     @empty

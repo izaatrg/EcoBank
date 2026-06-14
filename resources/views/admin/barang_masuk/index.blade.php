@@ -4,7 +4,17 @@
 @section('search_placeholder', 'Cari data stok...')
 
 @section('content')
-<div class="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+<div class="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 animate-fade-in">
+
+    @if(session('success'))
+        <div class="toast-success">{{ session('success') }}</div>
+    @endif
+
+    @if($errors->any())
+        <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-xs font-semibold">
+            <ul class="list-disc pl-4">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
+        </div>
+    @endif
 
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 pb-5">
         <div class="space-y-1">
@@ -17,7 +27,7 @@
             </div>
             <div>
                 <span class="text-[9px] uppercase tracking-wider font-bold text-slate-400 block">Total Stok Hari Ini</span>
-                <span class="text-base font-extrabold text-slate-800 tracking-tight">{{ $data->sum('jumlah') }} <span class="text-xs font-bold text-slate-400">Unit</span></span>
+                <span class="text-base font-extrabold text-slate-800 tracking-tight">{{ number_format($totalHariIni, 0, ',', '.') }} <span class="text-xs font-bold text-slate-400">Unit</span></span>
             </div>
         </div>
     </div>
@@ -29,7 +39,7 @@
                 <div class="w-7 h-7 bg-emerald-50 text-emerald-700 rounded-lg flex items-center justify-center text-xs"><i class="fa-solid fa-circle-plus"></i></div>
                 <h2 class="text-sm font-bold text-slate-800">Input Barang Baru</h2>
             </div>
-            <form action="{{ route('admin.barang_masuk.store') }}" method="POST" class="space-y-4">
+            <form action="{{ route('admin.barang_masuk.store') }}" method="POST" class="space-y-4 admin-form" data-loading="true">
                 @csrf
                 <div class="space-y-1.5"><label class="text-xs font-bold text-slate-500 block">Kode Transaksi</label><input type="text" name="kode_transaksi" class="w-full bg-slate-50/50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-semibold outline-none focus:border-emerald-500" required></div>
                 <div class="space-y-1.5"><label class="text-xs font-bold text-slate-500 block">Nama Barang</label><input type="text" name="nama_barang" class="w-full bg-slate-50/50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-semibold outline-none focus:border-emerald-500" required></div>
@@ -55,8 +65,11 @@
                     <div class="w-7 h-7 bg-emerald-50 text-emerald-700 rounded-lg flex items-center justify-center text-xs"><i class="fa-solid fa-history"></i></div>Riwayat Barang Masuk
                 </h2>
                 <div class="flex gap-2 shrink-0">
-                    <a href="{{ route('admin.barang_masuk.export') }}" class="border border-slate-200 px-3 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 flex items-center gap-2"><i class="fa-solid fa-file-csv text-slate-400"></i> Export</a>
-                    <button class="border border-slate-200 px-3 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 flex items-center gap-2"><i class="fa-solid fa-sliders text-slate-400"></i> Filter</button>
+                    <form method="GET" class="flex gap-2">
+                        <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari..." class="admin-input w-32 py-2">
+                        <button type="submit" class="admin-btn-ghost text-xs"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </form>
+                    <a href="{{ route('admin.barang_masuk.export') }}" class="admin-btn-ghost text-xs"><i class="fa-solid fa-file-csv"></i> Export</a>
                 </div>
             </div>
 

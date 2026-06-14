@@ -10,24 +10,24 @@
             <h1 class="text-3xl font-black text-[#143E22]">Halo, Pak Budi</h1>
             <p class="text-sm font-semibold text-slate-400">Berikut ringkasan statistik Bank Sampah hari ini.</p>
         </div>
-        <button class="bg-[#1E5631] hover:bg-[#143E22] text-white px-6 py-3 rounded-xl font-bold text-sm 
+        <a href="{{ route('admin.transaksi.create') }}" class="bg-[#1E5631] hover:bg-[#143E22] text-white px-6 py-3 rounded-xl font-bold text-sm 
                        transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg flex items-center gap-2">
             <i class="fa-solid fa-plus"></i> Input Sampah Baru
-        </button>
+        </a>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
         @php
         $stats = [
-        ['label' => 'Total Sampah Terkumpul', 'val' => '0', 'unit' => 'Kg', 'icon' => 'fa-recycle'],
-        ['label' => 'Total Nasabah Aktif', 'val' => '0', 'unit' => 'Warga', 'icon' => 'fa-user'],
-        ['label' => 'Koin Terdistribusi', 'val' => '0', 'unit' => 'IDR', 'icon' => 'fa-wallet'],
-        ['label' => 'Total Arus Barang', 'val' => '0', 'unit' => 'Item', 'icon' => 'fa-right-left'],
+        ['label' => 'Total Sampah Terkumpul', 'val' => number_format($total_sampah ?? 0, 0, ',', '.'), 'unit' => 'Kg', 'icon' => 'fa-recycle'],
+        ['label' => 'Total Nasabah Aktif', 'val' => $total_warga ?? 0, 'unit' => 'Warga', 'icon' => 'fa-user'],
+        ['label' => 'Koin Terdistribusi', 'val' => number_format($total_koin ?? 0, 0, ',', '.'), 'unit' => 'IDR', 'icon' => 'fa-wallet'],
+        ['label' => 'Total Arus Barang', 'val' => number_format($total_barang ?? 0, 0, ',', '.'), 'unit' => 'Item', 'icon' => 'fa-right-left'],
         ];
         @endphp
 
         @foreach($stats as $s)
-        <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm 
+        <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm
                     transition-all duration-300 hover:scale-[1.03] hover:shadow-md cursor-pointer group">
             <div class="flex justify-between items-start">
                 <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center">
@@ -61,7 +61,24 @@
 
         <div class="lg:col-span-4 bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
             <h2 class="text-sm font-bold text-slate-800 mb-4">Transaksi Terbaru</h2>
+            @if($recent_transaksi && $recent_transaksi->count() > 0)
+            <div class="space-y-3">
+                @foreach($recent_transaksi as $transaksi)
+                <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
+                    <div class="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center text-xs">
+                        <i class="fa-solid fa-recycle"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs font-bold text-slate-800">{{ $transaksi->warga->name ?? 'Unknown' }}</p>
+                        <p class="text-[10px] text-slate-500">{{ $transaksi->kategori->nama ?? 'Unknown' }} - {{ number_format($transaksi->berat, 1) }} kg</p>
+                    </div>
+                    <span class="text-xs font-bold text-emerald-600">{{ number_format($transaksi->total_koin) }}</span>
+                </div>
+                @endforeach
+            </div>
+            @else
             <div class="h-48 flex flex-col items-center justify-center text-slate-400 italic text-xs">Belum ada transaksi</div>
+            @endif
         </div>
     </div>
 
@@ -77,7 +94,7 @@
             </div>
         </div>
 
-        <button class="lg:col-span-4 bg-white p-6 rounded-2xl border border-slate-100 shadow-sm text-left
+        <a href="{{ route('admin.estruck.index') }}" class="lg:col-span-4 bg-white p-6 rounded-2xl border border-slate-100 shadow-sm text-left
                        transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]
                        flex items-center justify-between group">
             <div class="flex items-center gap-4">
@@ -90,7 +107,7 @@
                 </div>
             </div>
             <i class="fa-solid fa-arrow-right text-slate-300 group-hover:text-emerald-600 transition-colors"></i>
-        </button>
+        </a>
     </div>
 </div>
 @endsection

@@ -47,11 +47,27 @@
                 </tr>
             </thead>
             <tbody>
+                @forelse($kategoris as $kategori)
+                <tr class="border-b border-slate-50 hover:bg-emerald-50/30 transition-colors duration-200">
+                    <td class="px-6 py-4 font-semibold text-slate-700">{{ $kategori->nama }}</td>
+                    <td class="px-6 py-4">Rp {{ number_format($kategori->harga, 0, ',', '.') }}</td>
+                    <td class="px-6 py-4">{{ $kategori->stok }} kg</td>
+                    <td class="px-6 py-4"><span class="status-badge status-emerald">{{ $kategori->kondisi }}</span></td>
+                    <td class="px-6 py-4 text-right space-x-2">
+                        <a href="{{ route('admin.kategori.edit', $kategori->id) }}" class="admin-btn-ghost text-xs inline-flex">Edit</a>
+                        <form action="{{ route('admin.kategori.destroy', $kategori->id) }}" method="POST" class="inline" onsubmit="return confirm('Hapus kategori?')">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="admin-btn-ghost text-xs text-red-600">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+                @empty
                 <tr>
                     <td colspan="5" class="py-24 text-center text-slate-400 font-medium italic">
                         Belum ada kategori sampah yang diinput.
                     </td>
                 </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

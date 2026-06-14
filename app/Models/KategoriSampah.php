@@ -10,4 +10,14 @@ class KategoriSampah extends Model
     use HasFactory;
     protected $table = 'kategori_sampah';
     protected $fillable = ['nama', 'harga', 'stok', 'kondisi'];
+
+    public function getNamaKategoriAttribute(): ?string
+    {
+        return $this->nama;
+    }
+
+    public function getKoinPerKgAttribute(): ?int
+    {
+        return $this->harga;
+    }
 }

@@ -5,7 +5,7 @@
 
 @if(session('success'))<div style="color:green">{{ session('success') }}</div>@endif
 
-<a href="{{ route('petugas.create') }}">Tambah Petugas</a>
+<a href="{{ route('admin.petugas.create') }}">Tambah Petugas</a>
 
 <table border="1" cellpadding="8" style="margin-top:10px; background:white;">
     <tr><th>Nama</th><th>Email</th><th>Aksi</th></tr>
@@ -14,8 +14,8 @@
         <td>{{ $p->name }}</td>
         <td>{{ $p->email }}</td>
         <td>
-            <a href="{{ route('petugas.edit',$p->id) }}">Edit</a>
-            <form action="{{ route('petugas.destroy',$p->id) }}" method="POST" style="display:inline">
+            <a href="{{ route('admin.petugas.edit',$p->id) }}">Edit</a>
+            <form action="{{ route('admin.petugas.destroy',$p->id) }}" method="POST" style="display:inline">
                 @csrf
                 @method('DELETE')
                 <button type="submit">Hapus</button>

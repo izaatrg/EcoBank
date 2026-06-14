@@ -10,7 +10,7 @@
     <h1>Edit Reward</h1>
 
     <form
-        action="{{ route('reward.update',$reward->id) }}"
+        action="{{ route('admin.reward.update',$reward->id) }}"
         method="POST">
 
         @csrf

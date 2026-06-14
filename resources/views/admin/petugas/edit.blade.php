@@ -19,7 +19,7 @@
         </div>
         @endif
 
-        <form method="POST" action="{{ route('petugas.update', $petugas->id) }}" class="mt-8 space-y-6">
+        <form method="POST" action="{{ route('admin.petugas.update', $petugas->id) }}" class="mt-8 space-y-6">
             @csrf
             @method('PUT')
 
@@ -48,7 +48,7 @@
             </div>
 
             <div class="flex flex-wrap items-center gap-3 pt-4">
-                <a href="{{ route('petugas.index') }}" class="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100">Kembali</a>
+                <a href="{{ route('admin.petugas.index') }}" class="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100">Kembali</a>
                 <button type="submit" class="rounded-2xl bg-[#1b513e] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#16432f]">Update</button>
             </div>
         </form>

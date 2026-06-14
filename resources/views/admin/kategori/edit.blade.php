@@ -9,7 +9,7 @@
 
     <h1>Edit Kategori Sampah</h1>
 
-    <form action="{{ route('kategori.update',$kategori->id) }}"
+    <form action="{{ route('admin.kategori.update',$kategori->id) }}"
         method="POST">
 
         @csrf

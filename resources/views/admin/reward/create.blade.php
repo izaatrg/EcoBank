@@ -9,7 +9,7 @@
 
     <h1>Tambah Reward</h1>
 
-    <form action="{{ route('reward.store') }}" method="POST">
+    <form action="{{ route('admin.reward.store') }}" method="POST">
 
         @csrf
 
@@ -42,7 +42,7 @@
 
     <br>
 
-    <a href="{{ route('reward.index') }}">
+    <a href="{{ route('admin.reward.index') }}">
         Kembali
     </a>
 
