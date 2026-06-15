@@ -6,7 +6,7 @@
 @section('content')
 <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 animate-fade-in">
     <div class="xl:col-span-7">
-        <div class="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden receipt-paper">
+        <div id="cetak-struk" class="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden receipt-paper">
             <div class="bg-[#1E5631] text-white text-center py-6 px-4">
                 <div class="w-12 h-12 bg-white/20 rounded-xl mx-auto flex items-center justify-center mb-2"><i class="fa-solid fa-recycle"></i></div>
                 <h2 class="font-black text-lg">EcoBank Manager</h2>
@@ -46,8 +46,11 @@
                         <p class="text-lg font-black">{{ $struk['total_koin'] }} Koin</p>
                     </div>
                 </div>
+                
                 <div class="flex items-center gap-4 pt-2 border-t border-dashed border-slate-200">
-                    <div class="w-16 h-16 bg-slate-100 rounded-lg flex items-center justify-center text-slate-300"><i class="fa-solid fa-qrcode text-2xl"></i></div>
+                    <div class="w-16 h-16 bg-slate-100 rounded-lg flex items-center justify-center">
+                        {!! QrCode::size(64)->generate(route('admin.estruck.show', $struk['nomor'])) !!}
+                    </div>
                     <div>
                         <p class="text-[10px] font-bold text-slate-500 uppercase">Pindai untuk verifikasi keaslian</p>
                         <p class="text-xs italic text-slate-400 mt-2">"Sampahmu adalah tabungan masa depanmu."</p>
@@ -62,11 +65,24 @@
         <div class="bg-white border border-slate-100 rounded-2xl p-5 shadow-xs">
             <h3 class="text-sm font-bold text-slate-800 mb-4">Tindakan</h3>
             <div class="space-y-3">
-                <button type="button" onclick="window.print()" class="admin-btn-primary w-full"><i class="fa-solid fa-print"></i> Cetak Struk</button>
-                <button type="button" class="admin-btn-outline w-full"><i class="fa-solid fa-share-nodes"></i> Bagikan (PDF)</button>
-                <button type="button" class="w-full py-3 text-red-500 text-xs font-bold hover:bg-red-50 rounded-xl transition-colors"><i class="fa-solid fa-trash"></i> Batalkan Transaksi</button>
+                <button type="button" onclick="window.print()" class="admin-btn-primary w-full bg-emerald-700 hover:bg-emerald-800 text-white py-3 rounded-xl font-bold text-xs transition-colors">
+                    <i class="fa-solid fa-print"></i> Cetak Struk
+                </button>
+
+                <a href="{{ route('admin.estruck.pdf', $struk['nomor']) }}" class="admin-btn-outline w-full block text-center py-3 border border-emerald-600 text-emerald-600 rounded-xl font-bold text-xs hover:bg-emerald-50 transition-all">
+                    <i class="fa-solid fa-share-nodes"></i> Bagikan (PDF)
+                </a>
+
+                <form action="{{ route('admin.estruck.cancel', $struk['nomor']) }}" method="POST" onsubmit="return confirm('Yakin ingin membatalkan transaksi ini?')">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="w-full py-3 text-red-500 text-xs font-bold hover:bg-red-50 rounded-xl transition-colors">
+                        <i class="fa-solid fa-trash"></i> Batalkan Transaksi
+                    </button>
+                </form>
             </div>
         </div>
+
         <div class="bg-[#1E5631] rounded-2xl p-5 text-white shadow-lg">
             <h3 class="font-bold text-sm">Statistik Dampak</h3>
             <p class="text-xs text-emerald-100 mt-1 opacity-90">Transaksi ini membantu mengurangi:</p>
@@ -84,4 +100,23 @@
         <a href="{{ route('admin.estruck.index') }}" class="inline-flex items-center gap-2 text-xs font-bold text-emerald-700 hover:underline"><i class="fa-solid fa-arrow-left"></i> Kembali ke Daftar Struk</a>
     </div>
 </div>
+
+<style>
+    @media print {
+        body * { visibility: hidden !important; }
+        #cetak-struk, #cetak-struk * { visibility: visible !important; }
+        #cetak-struk {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+    }
+</style>
 @endsection

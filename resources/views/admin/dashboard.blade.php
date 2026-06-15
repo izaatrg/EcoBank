@@ -3,111 +3,125 @@
 @section('page_title', 'Ringkasan Operasional')
 
 @section('content')
-<div class="space-y-6">
-
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div class="space-y-1">
-            <h1 class="text-3xl font-black text-[#143E22]">Halo, Pak Budi</h1>
-            <p class="text-sm font-semibold text-slate-400">Berikut ringkasan statistik Bank Sampah hari ini.</p>
-        </div>
-        <a href="{{ route('admin.transaksi.create') }}" class="bg-[#1E5631] hover:bg-[#143E22] text-white px-6 py-3 rounded-xl font-bold text-sm 
-                       transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg flex items-center gap-2">
-            <i class="fa-solid fa-plus"></i> Input Sampah Baru
-        </a>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-        @php
-        $stats = [
-        ['label' => 'Total Sampah Terkumpul', 'val' => number_format($total_sampah ?? 0, 0, ',', '.'), 'unit' => 'Kg', 'icon' => 'fa-recycle'],
-        ['label' => 'Total Nasabah Aktif', 'val' => $total_warga ?? 0, 'unit' => 'Warga', 'icon' => 'fa-user'],
-        ['label' => 'Koin Terdistribusi', 'val' => number_format($total_koin ?? 0, 0, ',', '.'), 'unit' => 'IDR', 'icon' => 'fa-wallet'],
-        ['label' => 'Total Arus Barang', 'val' => number_format($total_barang ?? 0, 0, ',', '.'), 'unit' => 'Item', 'icon' => 'fa-right-left'],
-        ];
-        @endphp
-
-        @foreach($stats as $s)
-        <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm
-                    transition-all duration-300 hover:scale-[1.03] hover:shadow-md cursor-pointer group">
-            <div class="flex justify-between items-start">
-                <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center">
-                    <i class="fa-solid {{ $s['icon'] }}"></i>
-                </div>
+<div class="space-y-8 animate-fade-in">
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-xs flex items-center gap-4">
+            <div class="w-12 h-12 bg-emerald-50 text-[#1E5631] rounded-xl flex items-center justify-center text-lg shadow-inner">
+                <i class="fa-solid fa-dumpster animate-pulse"></i>
             </div>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-4">{{ $s['label'] }}</p>
-            <div class="flex items-baseline gap-1 mt-1">
-                <h2 class="text-2xl font-black text-slate-800">{{ $s['val'] }}</h2>
-                <span class="text-xs font-bold text-slate-400">{{ $s['unit'] }}</span>
-            </div>
-        </div>
-        @endforeach
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div class="lg:col-span-8 bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-sm font-bold text-slate-800">Tren Pengumpulan Mingguan</h2>
-                <span class="text-[10px] font-bold text-slate-400 bg-slate-50 px-3 py-1 rounded-lg">Minggu Ini</span>
-            </div>
-            <div class="h-48 flex items-end justify-between gap-4">
-                @foreach(['SEN','SEL','RAB','KAM','JUM','SAB','MIN'] as $hari)
-                <div class="w-full flex flex-col items-center gap-2">
-                    <div class="w-full bg-slate-50 rounded-t-lg h-16"></div>
-                    <span class="text-[10px] font-bold text-slate-400">{{ $hari }}</span>
-                </div>
-                @endforeach
+            <div>
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Sampah</p>
+                <h3 class="text-2xl font-extrabold text-slate-800 mt-0.5">{{ number_format($total_sampah ?? 0, 1) }} <span class="text-xs font-bold text-slate-400">Kg</span></h3>
             </div>
         </div>
 
-        <div class="lg:col-span-4 bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-            <h2 class="text-sm font-bold text-slate-800 mb-4">Transaksi Terbaru</h2>
-            @if($recent_transaksi && $recent_transaksi->count() > 0)
-            <div class="space-y-3">
-                @foreach($recent_transaksi as $transaksi)
-                <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
-                    <div class="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center text-xs">
-                        <i class="fa-solid fa-recycle"></i>
-                    </div>
-                    <div class="flex-1">
-                        <p class="text-xs font-bold text-slate-800">{{ $transaksi->warga->name ?? 'Unknown' }}</p>
-                        <p class="text-[10px] text-slate-500">{{ $transaksi->kategori->nama ?? 'Unknown' }} - {{ number_format($transaksi->berat, 1) }} kg</p>
-                    </div>
-                    <span class="text-xs font-bold text-emerald-600">{{ number_format($transaksi->total_koin) }}</span>
-                </div>
-                @endforeach
+        <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-xs flex items-center gap-4">
+            <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-lg shadow-inner">
+                <i class="fa-solid fa-coins"></i>
             </div>
-            @else
-            <div class="h-48 flex flex-col items-center justify-center text-slate-400 italic text-xs">Belum ada transaksi</div>
-            @endif
+            <div>
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Koin Terdistribusi</p>
+                <h3 class="text-2xl font-extrabold text-slate-800 mt-0.5">{{ number_format($total_koin ?? 0) }} <span class="text-xs font-bold text-amber-500">Eco</span></h3>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-xs flex items-center gap-4">
+            <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-lg shadow-inner">
+                <i class="fa-solid fa-users"></i>
+            </div>
+            <div>
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Warga Terdaftar</p>
+                <h3 class="text-2xl font-extrabold text-slate-800 mt-0.5">{{ $total_warga ?? 0 }} <span class="text-xs font-bold text-slate-400">Jiwa</span></h3>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-xs flex items-center gap-4">
+            <div class="w-12 h-12 bg-red-50 text-red-600 rounded-xl flex items-center justify-center text-lg shadow-inner">
+                <i class="fa-solid fa-arrow-trend-up"></i>
+            </div>
+            <div>
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Setoran Hari Ini</p>
+                <h3 class="text-2xl font-extrabold text-slate-800 mt-0.5">{{ $transaksi_hari_ini ?? 0 }} <span class="text-xs font-bold text-slate-400">Sesi</span></h3>
+            </div>
         </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div class="lg:col-span-8 bg-[#1E5631] p-6 rounded-2xl text-white shadow-lg">
-            <h3 class="text-sm font-bold">Target Keberlanjutan</h3>
-            <p class="text-[10px] text-emerald-100 mt-1">Bantu komunitas mencapai target 2 Ton sampah bulan ini.</p>
-            <div class="mt-8">
-                <div class="w-full bg-emerald-900 rounded-full h-2">
-                    <div class="bg-emerald-400 h-2 rounded-full" style="width: 0%"></div>
-                </div>
-                <div class="flex justify-between text-[10px] font-bold mt-2 opacity-80"><span>0 Kg</span><span>2.000 Kg</span></div>
-            </div>
-        </div>
-
-        <a href="{{ route('admin.estruck.index') }}" class="lg:col-span-4 bg-white p-6 rounded-2xl border border-slate-100 shadow-sm text-left
-                       transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]
-                       flex items-center justify-between group">
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center">
-                    <i class="fa-solid fa-qrcode"></i>
-                </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-100 shadow-xs overflow-hidden">
+            <div class="p-6 border-b border-slate-50 flex justify-between items-center bg-linear-to-r from-white to-emerald-50/20">
                 <div>
-                    <h3 class="text-sm font-bold text-slate-800">Scan E-Struk</h3>
-                    <p class="text-[11px] text-slate-400">Validasi cepat via QR.</p>
+                    <h3 class="text-sm font-bold text-slate-800">Aktivitas Setoran Terakhir</h3>
+                    <p class="text-[11px] text-slate-400 font-medium mt-0.5">Daftar 5 penimbangan sampah terbaru dari warga.</p>
+                </div>
+                <a href="{{ route('admin.riwayat_transaksi.index') }}" class="admin-btn-ghost text-[10px] px-3 py-1.5 flex items-center gap-1.5">
+                    Lihat Semua <i class="fa-solid fa-angle-right text-[8px]"></i>
+                </a>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50/70 border-b border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                            <th class="py-3 px-6">Warga</th>
+                            <th class="py-3 px-6">Jenis Sampah</th>
+                            <th class="py-3 px-6 text-center">Berat</th>
+                            <th class="py-3 px-6 text-right">Koin Didapat</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-xs font-semibold text-slate-600 divide-y divide-slate-50">
+                        {{-- 1. Variabel disesuaikan menjadi $recent_transaksi sesuai controller --}}
+                        @forelse($recent_transaksi ?? [] as $tx)
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="py-4 px-6 font-bold text-slate-800">{{ $tx->warga->name ?? 'Warga Terhapus' }}</td>
+                            <td class="py-4 px-6">
+                                <span class="status-badge status-emerald">{{ $tx->kategori->nama ?? 'Umum' }}</span>
+                            </td>
+                            <td class="py-4 px-6 text-center font-bold text-[#1E5631]">{{ number_format($tx->berat, 1) }} Kg</td>
+                            {{-- 2. Memanggil $tx->total_koin sesuai dengan nama kolom database kamu --}}
+                            <td class="py-4 px-6 text-right text-amber-600 font-extrabold">+{{ number_format($tx->total_koin ?? 0) }} Eco</td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="4" class="py-12 text-center text-slate-400 font-medium">
+                                <div class="flex flex-col items-center gap-2">
+                                    <i class="fa-solid fa-folder-open text-2xl text-slate-300"></i>
+                                    <span>Belum ada data setoran sampah masuk hari ini.</span>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div class="bg-gradient-to-br from-[#1E5631] to-[#2D6A4F] p-6 rounded-2xl text-white shadow-md relative overflow-hidden">
+                <div class="absolute -right-6 -bottom-6 text-white/5 text-8xl pointer-events-none">
+                    <i class="fa-solid fa-leaf"></i>
+                </div>
+                <h3 class="text-sm font-bold tracking-wide">Pencatatan Cepat</h3>
+                <p class="text-xs text-emerald-100/80 mt-1 mb-6">Warga sudah di depan timbangan? Klik tombol di bawah untuk langsung menginput data sampah.</p>
+                
+                <a href="{{ route('admin.transaksi.create') }}" class="w-full bg-white text-[#1E5631] hover:bg-emerald-50 py-3 rounded-xl text-xs font-extrabold flex items-center justify-center gap-2 shadow-sm transition-all active:scale-98">
+                    <i class="fa-solid fa-scale-hammer"></i> Input Sampah Baru
+                </a>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-xs space-y-4">
+                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Status Petugas</h4>
+                <div class="flex items-center justify-between p-3 bg-emerald-50/50 border border-emerald-100/40 rounded-xl">
+                    <div class="flex items-center gap-3">
+                        <div class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></div>
+                        <span class="text-xs font-bold text-slate-700">Petugas Aktif</span>
+                    </div>
+                    <span class="text-[10px] font-extrabold bg-[#1E5631] text-white px-2 py-0.5 rounded-md">{{ Auth::user()->name }}</span>
                 </div>
             </div>
-            <i class="fa-solid fa-arrow-right text-slate-300 group-hover:text-emerald-600 transition-colors"></i>
-        </a>
+        </div>
+
     </div>
 </div>
 @endsection

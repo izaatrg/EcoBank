@@ -11,17 +11,21 @@
             <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Daftar Tamu</h1>
             <p class="text-slate-400 text-xs font-medium mt-0.5">Catat dan pantau transaksi harian setoran sampah dari nasabah EcoBank.</p>
         </div>
-        <button class="bg-[#1E5631] hover:bg-emerald-800 text-white px-4 py-2.5 rounded-xl font-bold flex items-center gap-2 transition-all active:scale-95 cursor-pointer shadow-sm">
-            <i class="fa-solid fa-plus text-[10px]"></i> Tambah Transaksi
-        </button>
+        
+        {{-- Tombol Tambah Transaksi yang sudah berfungsi --}}
+        <a href="{{ route('admin.warga.create') }}" class="bg-[#1E5631] hover:bg-emerald-800 text-white px-4 py-2.5 rounded-xl font-bold flex items-center gap-2 transition-all active:scale-95 cursor-pointer shadow-sm">
+            <i class="fa-solid fa-plus text-[10px]"></i> 
+            <span class="text-sm">Tambah Transaksi</span>
+        </a>
     </div>
 
+    {{-- Statistik (Ganti $stat['val'] dengan variabel Controller nantinya) --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         @foreach([
-            ['label' => 'Total Nasabah Hari Ini', 'val' => '0', 'icon' => 'fa-user-plus', 'color' => 'emerald', 'unit' => ''],
-            ['label' => 'Total Berat Masuk', 'val' => '0', 'icon' => 'fa-scale-balanced', 'color' => 'emerald', 'unit' => 'kg'],
-            ['label' => 'Total Koin Terbit', 'val' => '0', 'icon' => 'fa-coins', 'color' => 'emerald', 'unit' => ''],
-            ['label' => 'Perlu Verifikasi', 'val' => '0', 'icon' => 'fa-clipboard-check', 'color' => 'amber', 'unit' => '']
+            ['label' => 'Total Nasabah Hari Ini', 'val' => $nasabahHariIni ?? 0, 'icon' => 'fa-user-plus', 'color' => 'emerald', 'unit' => ''],
+            ['label' => 'Total Berat Masuk', 'val' => $totalBerat ?? 0, 'icon' => 'fa-scale-balanced', 'color' => 'emerald', 'unit' => 'kg'],
+            ['label' => 'Total Koin Terbit', 'val' => $totalKoin ?? 0, 'icon' => 'fa-coins', 'color' => 'emerald', 'unit' => ''],
+            ['label' => 'Perlu Verifikasi', 'val' => $perluVerifikasi ?? 0, 'icon' => 'fa-clipboard-check', 'color' => 'amber', 'unit' => '']
         ] as $stat)
         <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm transition-all duration-300 hover:shadow-md hover:border-emerald-100 flex flex-col justify-between h-28">
             <div class="flex items-center gap-2">
@@ -38,6 +42,7 @@
         @endforeach
     </div>
 
+    {{-- Tabel Data --}}
     <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
         <div class="p-5 border-b border-slate-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div class="flex items-center gap-3">
@@ -68,24 +73,19 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @forelse($transaksis ?? [] as $transaksi)
+                        @empty
                     <tr>
                         <td colspan="7" class="py-24 text-center text-slate-400 font-medium italic text-sm">Belum ada data transaksi yang ditemukan.</td>
                     </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
-
+        
+        {{-- Pagination Placeholder --}}
         <div class="p-4 bg-slate-50/30 border-t border-slate-100 flex justify-between items-center text-[11px] font-bold text-slate-400">
             <span>Menampilkan 0 dari 0 entri</span>
-            <div class="flex gap-1">
-                <button disabled class="w-6 h-6 border border-slate-200 bg-slate-50 rounded flex items-center justify-center text-slate-300 cursor-not-allowed">
-                    <i class="fa-solid fa-chevron-left text-[8px]"></i>
-                </button>
-                <button class="w-6 h-6 bg-[#1E5631] text-white rounded flex items-center justify-center shadow-sm">1</button>
-                <button disabled class="w-6 h-6 border border-slate-200 bg-slate-50 rounded flex items-center justify-center text-slate-300 cursor-not-allowed">
-                    <i class="fa-solid fa-chevron-right text-[8px]"></i>
-                </button>
-            </div>
         </div>
     </div>
 </div>

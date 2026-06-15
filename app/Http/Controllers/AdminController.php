@@ -2,35 +2,45 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Reward;
+use App\Models\KategoriSampah;
 use App\Models\TransaksiSetoran;
-use App\Models\Penjemputan;
-use App\Models\PenukaranReward;
-use App\Models\BarangMasuk;
 
 class AdminController extends Controller
 {
     public function dashboard()
     {
-        // Calculate real statistics
-        $totalSampah = TransaksiSetoran::sum('berat');
-        $totalWarga = User::where('role', 'warga')->count();
-        $totalKoin = TransaksiSetoran::sum('total_koin');
-        $totalBarang = BarangMasuk::sum('jumlah');
+        return view('admin.dashboard');
+    }
 
-        // Get recent transactions
-        $recentTransaksi = TransaksiSetoran::with(['warga', 'kategori'])
-            ->latest()
-            ->take(5)
-            ->get();
+    public function create() 
+    {
+        // Mengambil data warga dan kategori
+        $wargas = User::where('role', 'warga')->get();
+        $kategoris = KategoriSampah::all();
+        
+        // Mengirimkan kedua data tersebut ke view
+        return view('admin.transaksi.create', compact('wargas', 'kategoris'));
+    }
 
-        return view('admin.dashboard', [
-            'total_sampah' => $totalSampah,
-            'total_warga' => $totalWarga,
-            'total_koin' => $totalKoin,
-            'total_barang' => $totalBarang,
-            'recent_transaksi' => $recentTransaksi,
+    public function store(Request $request) 
+    {
+        $request->validate([
+            'user_id' => 'required',
+            'kategori_id' => 'required',
+            'berat' => 'required|numeric',
         ]);
+
+        $kategori = KategoriSampah::findOrFail($request->kategori_id);
+        
+        TransaksiSetoran::create([
+            'user_id' => $request->user_id,
+            'kategori_id' => $request->kategori_id,
+            'berat' => $request->berat,
+            'total_koin' => $request->berat * $kategori->harga, 
+        ]);
+
+        return redirect()->route('admin.dashboard')->with('success', 'Transaksi berhasil disimpan!');
     }
 }

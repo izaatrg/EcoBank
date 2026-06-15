@@ -2,37 +2,30 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TransaksiSetoran extends Model
 {
-    use HasFactory;
-
     protected $table = 'transaksi_setoran';
 
+    // Tambahkan 'status' di sini agar tidak kena MassAssignmentException
     protected $fillable = [
-        'warga_id',
-        'petugas_id',
-        'kategori_id',
-        'berat',
-        'total_koin',
-        'tanggal_setor',
+        'warga_id', 
+        'kategori_id', 
+        'berat', 
+        'total_koin', 
+        'petugas_id', 
+        'tanggal_setor', 
+        'status' 
     ];
 
-    public function warga(): BelongsTo
-    {
+    // Relasi ke User
+    public function user() {
         return $this->belongsTo(User::class, 'warga_id');
     }
 
-    public function petugas(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'petugas_id');
-    }
-
-    public function kategori(): BelongsTo
-    {
+    // Relasi ke Kategori Sampah
+    public function kategoriSampah() {
         return $this->belongsTo(KategoriSampah::class, 'kategori_id');
     }
 }

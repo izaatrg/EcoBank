@@ -9,17 +9,13 @@ class Reward extends Model
 {
     use HasFactory;
 
-    protected $table = 'reward';
+    protected $table = 'rewards'; // Pastikan sesuai nama tabel di DB
 
     protected $fillable = [
         'nama_reward',
         'jumlah_koin',
         'stok',
-        'gambar'
+        'gambar',
+        'kategori' 
     ];
-
-    public function penukaranReward()
-    {
-        return $this->hasMany(PenukaranReward::class, 'reward_id');
-    }
 }

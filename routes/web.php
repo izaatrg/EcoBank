@@ -17,6 +17,7 @@ use App\Http\Controllers\BarangKeluarController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\RiwayatTransaksiController;
 use App\Http\Controllers\EStrukController;
+use App\Http\Controllers\TransaksiController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -63,18 +64,29 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
     Route::get('/riwayat-transaksi', [RiwayatTransaksiController::class, 'index'])->name('riwayat_transaksi.index');
+    
+    // Rute E-Struk & Penambahan Fitur PDF/Cancel
     Route::get('/e-struk', [EStrukController::class, 'index'])->name('estruck.index');
     Route::get('/e-struk/{nomor}', [EStrukController::class, 'show'])->name('estruck.show');
+    Route::get('/e-struk/{id}/pdf', [EStrukController::class, 'generatePdf'])->name('estruck.pdf');
+    Route::delete('/e-struk/{id}/cancel', [EStrukController::class, 'cancel'])->name('estruck.cancel');
 
-    // Barang Masuk
+    // Barang Masuk & Keluar
     Route::get('/barang-masuk', [BarangMasukController::class, 'index'])->name('barang_masuk.index');
     Route::post('/barang-masuk', [BarangMasukController::class, 'store'])->name('barang_masuk.store');
     Route::get('/barang-masuk/export', [BarangMasukController::class, 'export'])->name('barang_masuk.export');
 
-    // Barang Keluar
     Route::get('/barang-keluar', [BarangKeluarController::class, 'index'])->name('barang_keluar.index');
     Route::post('/barang-keluar', [BarangKeluarController::class, 'store'])->name('barang_keluar.store');
     Route::get('/barang-keluar/export', [BarangKeluarController::class, 'export'])->name('barang_keluar.export');
+
+    // Transaksi Tambahan
+    Route::get('/transaksi/create', [TransaksiController::class, 'create'])->name('transaksi.create');
+    Route::post('/transaksi/store', [TransaksiController::class, 'store'])->name('transaksi.store');
+    
+    // Export Kategori
+    Route::get('/kategori/export/pdf', [KategoriSampahController::class, 'exportPdf'])->name('kategori.export.pdf');
+    Route::get('/kategori/export/csv', [KategoriSampahController::class, 'exportCsv'])->name('kategori.export.csv');
 });
 
 Route::middleware(['auth', 'role:petugas'])->prefix('petugas')->name('petugas.')->group(function () {

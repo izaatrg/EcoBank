@@ -3,18 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf; 
 
 class EStrukController extends Controller
 {
     public function index(Request $request)
     {
         $struks = collect($this->dummyStruks());
-
         if ($q = $request->get('q')) {
             $struks = $struks->filter(fn ($s) => str_contains(strtolower($s['nomor']), strtolower($q))
                 || str_contains(strtolower($s['nasabah']), strtolower($q)));
         }
-
         return view('admin.estruck.index', compact('struks'));
     }
 
@@ -22,8 +21,25 @@ class EStrukController extends Controller
     {
         $struk = collect($this->dummyStruks())->firstWhere('nomor', $nomor)
             ?? $this->dummyStruks()[0];
-
         return view('admin.estruck.show', compact('struk'));
+    }
+
+    // Fungsi untuk PDF
+    public function generatePdf($nomor)
+    {
+        $struk = collect($this->dummyStruks())->firstWhere('nomor', $nomor);
+        if (!$struk) return abort(404);
+
+        $pdf = Pdf::loadView('admin.estruck.pdf_view', compact('struk'));
+        return $pdf->download('Struk_' . $struk['nomor'] . '.pdf');
+    }
+
+    // Fungsi untuk Batalkan
+    public function cancel($nomor)
+    {
+        // Logika penghapusan database bisa ditaruh di sini nanti
+        return redirect()->route('admin.estruck.index')
+            ->with('success', 'Transaksi ' . $nomor . ' berhasil dibatalkan.');
     }
 
     private function dummyStruks(): array

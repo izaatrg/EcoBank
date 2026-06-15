@@ -203,11 +203,14 @@
                 </a>
             </nav>
 
+            <!-- BAGIAN DINAMIS: Data Foto & Nama User di Samping Tombol Keluar -->
             <div class="p-4 m-4 bg-emerald-50 rounded-2xl border border-emerald-100/50">
                 <div class="flex items-center gap-3 mb-3">
-                    <img src="https://ui-avatars.com/api/?name=Budi+Santoso&background=2D6A4F&color=fff" class="w-9 h-9 rounded-xl shadow-sm" alt="User Avatar">
-                    <div>
-                        <p class="text-xs font-bold text-slate-900">Budi Santoso</p>
+                    <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&background=2D6A4F&color=fff' }}" 
+                         class="w-9 h-9 rounded-xl shadow-sm object-cover border border-emerald-600/10" 
+                         alt="User Avatar">
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xs font-bold text-slate-900 truncate">{{ Auth::user()->name }}</p>
                         <p class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Manager</p>
                     </div>
                 </div>
@@ -301,6 +304,61 @@
             });
         });
     </script>
+@if(session('success'))
+
+<div id="success-alert"
+     class="fixed top-5 right-5 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg z-[99999]">
+
+    <div class="flex items-center gap-2">
+        <i class="fa-solid fa-circle-check"></i>
+        <span>{{ session('success') }}</span>
+    </div>
+
+</div>
+
+<style>
+#success-alert{
+    animation: slideSuccess .4s ease;
+}
+
+@keyframes slideSuccess{
+    from{
+        opacity:0;
+        transform:translateX(100%);
+    }
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+}
+</style>
+
+<script>
+window.addEventListener('load', function(){
+
+    let alertBox = document.getElementById('success-alert');
+
+    if(alertBox){
+
+        setTimeout(function(){
+
+            alertBox.style.transition = "all .5s ease";
+            alertBox.style.opacity = "0";
+            alertBox.style.transform = "translateX(100%)";
+
+            setTimeout(function(){
+                alertBox.remove();
+            },500);
+
+        },3000);
+
+    }
+
+});
+</script>
+
+@endif
+    
 </body>
 
 </html>
