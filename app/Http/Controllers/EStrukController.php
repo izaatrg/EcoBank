@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf; 
 
 class EStrukController extends Controller
 {
@@ -22,16 +21,6 @@ class EStrukController extends Controller
         $struk = collect($this->dummyStruks())->firstWhere('nomor', $nomor)
             ?? $this->dummyStruks()[0];
         return view('admin.estruck.show', compact('struk'));
-    }
-
-    // Fungsi untuk PDF
-    public function generatePdf($nomor)
-    {
-        $struk = collect($this->dummyStruks())->firstWhere('nomor', $nomor);
-        if (!$struk) return abort(404);
-
-        $pdf = Pdf::loadView('admin.estruck.pdf_view', compact('struk'));
-        return $pdf->download('Struk_' . $struk['nomor'] . '.pdf');
     }
 
     // Fungsi untuk Batalkan

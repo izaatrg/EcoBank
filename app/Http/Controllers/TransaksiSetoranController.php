@@ -9,35 +9,31 @@ use Illuminate\Http\Request;
 
 class TransaksiSetoranController extends Controller
 {
-    public function index()
-    {
-        $transaksi = TransaksiSetoran::with(['warga', 'kategori'])->latest()->get();
-        return view('admin.transaksi.index', compact('transaksi'));
-    }
-
     public function create()
     {
         $wargas = User::where('role', 'warga')->get();
         $kategoris = KategoriSampah::all();
         
+        // PASTI KAN INI SESUAI LOKASI FILE: resources/views/admin/transaksi/create.blade.php
         return view('admin.transaksi.create', compact('wargas', 'kategoris'));
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'warga_id'    => 'required|exists:users,id',
-            'kategori_id' => 'required|exists:kategori_sampah,id',
-            'berat'       => 'required|numeric',
-            'total_koin'  => 'required|numeric',
+        $request->validate([
+            'warga_id' => 'required',
+            'kategori_id' => 'required',
+            'berat' => 'required|numeric',
         ]);
 
-        $validated['petugas_id'] = auth()->id();
-        $validated['tanggal_setor'] = now();
+        TransaksiSetoran::create([
+            'warga_id' => $request->warga_id,
+            'kategori_id' => $request->kategori_id,
+            'berat' => $request->berat,
+            'tanggal' => now(),
+            'status' => 'Pending',
+        ]);
 
-        TransaksiSetoran::create($validated);
-
-        return redirect()->route('admin.transaksi.index')
-                         ->with('success', 'Transaksi berhasil disimpan!');
+        return redirect()->route('admin.transaksi.index')->with('success', 'Berhasil!');
     }
 }

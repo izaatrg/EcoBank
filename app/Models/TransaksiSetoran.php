@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class TransaksiSetoran extends Model
 {
+    use HasFactory;
+
     protected $table = 'transaksi_setoran';
 
-    // Tambahkan 'status' di sini agar tidak kena MassAssignmentException
     protected $fillable = [
         'warga_id', 
         'kategori_id', 
@@ -19,13 +21,12 @@ class TransaksiSetoran extends Model
         'status' 
     ];
 
-    // Relasi ke User
-    public function user() {
+    // SATUKAN NAMA RELASI AGAR SESUAI DENGAN CONTROLLER
+    public function warga() {
         return $this->belongsTo(User::class, 'warga_id');
     }
 
-    // Relasi ke Kategori Sampah
-    public function kategoriSampah() {
+    public function kategori() {
         return $this->belongsTo(KategoriSampah::class, 'kategori_id');
     }
 }

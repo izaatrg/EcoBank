@@ -12,30 +12,29 @@ class WargaController extends Controller
     public function index()
     {
         $transaksis = TransaksiSetoran::with(['user', 'kategoriSampah'])->latest()->get();
-        $nasabahHariIni = TransaksiSetoran::whereDate('created_at', today())->count();
-        $totalBerat = TransaksiSetoran::sum('berat');
-        $totalKoin = TransaksiSetoran::sum('total_koin');
-
-        return view('admin.warga.index', compact('transaksis', 'nasabahHariIni', 'totalBerat', 'totalKoin'));
+        return view('admin.warga.index', compact('transaksis'));
     }
 
-    public function updateProfile(Request $request)
+    public function create()
     {
-        /** @var \App\Models\User $warga */
-        $warga = auth()->user();
-        
+        return view('admin.warga.create');
+    }
+
+    public function store(Request $request)
+    {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $warga->id,
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6',
         ]);
 
-        $warga->update($request->only(['name', 'email', 'no_hp', 'alamat']));
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'warga',
+        ]);
 
-        if ($request->filled('password')) {
-            $warga->password = Hash::make($request->password);
-            $warga->save();
-        }
-
-        return back()->with('success', 'Profil berhasil diupdate');
+        return redirect()->route('admin.warga.index')->with('success', 'Warga berhasil ditambah');
     }
 }

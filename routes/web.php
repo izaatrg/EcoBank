@@ -18,13 +18,17 @@ use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\RiwayatTransaksiController;
 use App\Http\Controllers\EStrukController;
 use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
+// Halaman Utama
 Route::get('/', function () {
     return view('welcome');
 });
 
+// Auth Routes bawaan
 require __DIR__ . '/auth.php';
 
+// Auth Middleware Group
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         $role = auth()->user()->role;
@@ -41,8 +45,15 @@ Route::middleware('auth')->group(function () {
         Route::patch('/', 'update')->name('profile.update');
         Route::delete('/', 'destroy')->name('profile.destroy');
     });
+
+    Route::get('/logout-confirm', function () {
+        return view('admin.logout-confirm'); 
+    })->name('admin.logout.confirm');
+
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });
 
+// Admin Routes
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
@@ -65,13 +76,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
     Route::get('/riwayat-transaksi', [RiwayatTransaksiController::class, 'index'])->name('riwayat_transaksi.index');
     
-    // Rute E-Struk & Penambahan Fitur PDF/Cancel
     Route::get('/e-struk', [EStrukController::class, 'index'])->name('estruck.index');
     Route::get('/e-struk/{nomor}', [EStrukController::class, 'show'])->name('estruck.show');
-    Route::get('/e-struk/{id}/pdf', [EStrukController::class, 'generatePdf'])->name('estruck.pdf');
+    // Bagian generatePdf sudah dihapus dari sini
     Route::delete('/e-struk/{id}/cancel', [EStrukController::class, 'cancel'])->name('estruck.cancel');
 
-    // Barang Masuk & Keluar
     Route::get('/barang-masuk', [BarangMasukController::class, 'index'])->name('barang_masuk.index');
     Route::post('/barang-masuk', [BarangMasukController::class, 'store'])->name('barang_masuk.store');
     Route::get('/barang-masuk/export', [BarangMasukController::class, 'export'])->name('barang_masuk.export');
@@ -80,20 +89,20 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/barang-keluar', [BarangKeluarController::class, 'store'])->name('barang_keluar.store');
     Route::get('/barang-keluar/export', [BarangKeluarController::class, 'export'])->name('barang_keluar.export');
 
-    // Transaksi Tambahan
     Route::get('/transaksi/create', [TransaksiController::class, 'create'])->name('transaksi.create');
     Route::post('/transaksi/store', [TransaksiController::class, 'store'])->name('transaksi.store');
     
-    // Export Kategori
     Route::get('/kategori/export/pdf', [KategoriSampahController::class, 'exportPdf'])->name('kategori.export.pdf');
     Route::get('/kategori/export/csv', [KategoriSampahController::class, 'exportCsv'])->name('kategori.export.csv');
 });
 
+// Petugas Routes
 Route::middleware(['auth', 'role:petugas'])->prefix('petugas')->name('petugas.')->group(function () {
     Route::get('/dashboard', [PetugasController::class, 'dashboard'])->name('dashboard');
     Route::get('/setoran', [TransaksiSetoranController::class, 'indexPetugas'])->name('setoran.index');
 });
 
+// Warga Routes
 Route::middleware(['auth', 'role:warga'])->prefix('warga')->name('warga.')->group(function () {
     Route::get('/dashboard', [WargaController::class, 'dashboard'])->name('dashboard');
 });

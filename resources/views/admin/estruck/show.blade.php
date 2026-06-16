@@ -69,10 +69,6 @@
                     <i class="fa-solid fa-print"></i> Cetak Struk
                 </button>
 
-                <a href="{{ route('admin.estruck.pdf', $struk['nomor']) }}" class="admin-btn-outline w-full block text-center py-3 border border-emerald-600 text-emerald-600 rounded-xl font-bold text-xs hover:bg-emerald-50 transition-all">
-                    <i class="fa-solid fa-share-nodes"></i> Bagikan (PDF)
-                </a>
-
                 <form action="{{ route('admin.estruck.cancel', $struk['nomor']) }}" method="POST" onsubmit="return confirm('Yakin ingin membatalkan transaksi ini?')">
                     @csrf
                     @method('DELETE')
