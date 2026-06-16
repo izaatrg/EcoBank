@@ -262,7 +262,7 @@
 
         @if ($errors->any())
         <div class="alert-error">
-            <i class="fa-solid fa-circle-exclamation"></i> Email atau kata sandi salah.
+            <i class="fa-solid fa-circle-exclamation"></i> {{ $errors->first() }}
         </div>
         @endif
 

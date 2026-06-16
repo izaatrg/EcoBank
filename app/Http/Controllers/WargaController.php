@@ -37,4 +37,21 @@ class WargaController extends Controller
 
         return redirect()->route('admin.warga.index')->with('success', 'Warga berhasil ditambah');
     }
+
+    public function dashboard()
+    {
+        $warga = auth()->user();
+        
+        $saldo = $warga->saldoKoin ? $warga->saldoKoin->total_koin : 0;
+        
+        $totalSetoran = $warga->transaksiSetoran()->sum('berat');
+        
+        $recentTransaksis = $warga->transaksiSetoran()
+            ->with('kategori')
+            ->latest()
+            ->limit(5)
+            ->get();
+            
+        return view('warga.dashboard', compact('saldo', 'totalSetoran', 'recentTransaksis'));
+    }
 }

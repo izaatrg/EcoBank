@@ -11,7 +11,19 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        return view('admin.dashboard');
+        $total_sampah = TransaksiSetoran::sum('berat');
+        $total_koin = TransaksiSetoran::sum('total_koin');
+        $total_warga = User::where('role', 'warga')->count();
+        $transaksi_hari_ini = TransaksiSetoran::whereDate('created_at', now()->toDateString())->count();
+        $recent_transaksi = TransaksiSetoran::with(['warga', 'kategori'])->latest()->limit(5)->get();
+
+        return view('admin.dashboard', compact(
+            'total_sampah',
+            'total_koin',
+            'total_warga',
+            'transaksi_hari_ini',
+            'recent_transaksi'
+        ));
     }
 
     public function create() 

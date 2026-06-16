@@ -100,9 +100,20 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 Route::middleware(['auth', 'role:petugas'])->prefix('petugas')->name('petugas.')->group(function () {
     Route::get('/dashboard', [PetugasController::class, 'dashboard'])->name('dashboard');
     Route::get('/setoran', [TransaksiSetoranController::class, 'indexPetugas'])->name('setoran.index');
+    Route::get('/profile', [PetugasController::class, 'showProfile'])->name('profile');
+    Route::post('/profile', [PetugasController::class, 'updateProfile'])->name('profile.update');
+    Route::get('/penjemputan', function() { return redirect()->route('petugas.dashboard')->with('info', 'Fitur Penjemputan segera hadir.'); })->name('penjemputan.index');
+    Route::get('/riwayat', function() { return redirect()->route('petugas.dashboard')->with('info', 'Fitur Riwayat segera hadir.'); })->name('riwayat');
 });
 
 // Warga Routes
 Route::middleware(['auth', 'role:warga'])->prefix('warga')->name('warga.')->group(function () {
     Route::get('/dashboard', [WargaController::class, 'dashboard'])->name('dashboard');
+    Route::get('/profile', function() { return redirect()->route('warga.dashboard')->with('info', 'Fitur Profil segera hadir.'); })->name('profile');
+    Route::get('/setor', function() { return redirect()->route('warga.dashboard')->with('info', 'Fitur Setor Sampah segera hadir.'); })->name('setor.form');
+    Route::get('/jemput', function() { return redirect()->route('warga.dashboard')->with('info', 'Fitur Jemput Sampah segera hadir.'); })->name('jemput.form');
+    Route::get('/tukar', function() { return redirect()->route('warga.dashboard')->with('info', 'Fitur Tukar Koin segera hadir.'); })->name('tukar.form');
+    Route::get('/riwayat', function() { return redirect()->route('warga.dashboard')->with('info', 'Fitur Riwayat segera hadir.'); })->name('riwayat');
+    Route::get('/jemput-history', function() { return redirect()->route('warga.dashboard')->with('info', 'Fitur Jadwal Jemput segera hadir.'); })->name('jemput.history');
+    Route::get('/tukar-history', function() { return redirect()->route('warga.dashboard')->with('info', 'Fitur Penukaran segera hadir.'); })->name('tukar.history');
 });

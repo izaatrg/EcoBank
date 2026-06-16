@@ -4,279 +4,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoBank Petugas</title>
-
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <title>EcoBank Petugas - Portal Petugas Lapangan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: #eaf6f0;
-            color: #1f2937;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F8FBF9;
         }
 
-        .navbar {
-            background-color: #1b513e;
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        .sidebar-active {
+            background-color: #124934 !important;
+            color: #ffffff !important;
+            font-weight: 700 !important;
         }
 
-        .navbar-title {
-            font-size: 1.5rem;
-            font-weight: 600;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .navbar-menu {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
+        .animate-fade-in { animation: fadeIn .35s ease-out; }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.625rem;
+            border-radius: 9999px;
+            font-size: 0.625rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
         }
 
-        .navbar-menu a {
-            color: white;
-            text-decoration: none;
-            font-size: 0.95rem;
-            transition: opacity 0.2s;
-        }
-
-        .navbar-menu a:hover {
-            opacity: 0.8;
-        }
-
-        .navbar-user {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .logout-btn {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.375rem;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background-color 0.2s;
-        }
-
-        .logout-btn:hover {
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .container-wrapper {
-            display: flex;
-            min-height: calc(100vh - 70px);
-        }
-
-        .sidebar {
-            width: 280px;
-            background-color: #1b513e;
-            color: white;
-            padding: 2rem 1rem;
-            box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .sidebar-menu {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .sidebar-menu a,
-        .sidebar-menu button {
-            display: block;
-            width: 100%;
-            padding: 0.75rem 1rem;
-            text-align: left;
-            background: none;
-            border: none;
-            color: white;
-            text-decoration: none;
-            border-radius: 0.375rem;
-            cursor: pointer;
-            font-size: 0.95rem;
-            transition: background-color 0.2s;
-        }
-
-        .sidebar-menu a:hover,
-        .sidebar-menu button:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .sidebar-menu a.active {
-            background-color: rgba(255, 255, 255, 0.2);
-            font-weight: 600;
-        }
-
-        .main-content {
-            flex: 1;
-            padding: 2rem;
-            overflow-y: auto;
-        }
-
-        .page-header {
-            background-color: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-        }
-
-        .page-title {
-            font-size: 1.875rem;
-            font-weight: 700;
-            color: #1f2937;
-            margin-bottom: 0.25rem;
-        }
-
-        .page-subtitle {
-            font-size: 0.875rem;
-            color: #6b7280;
-        }
-
-        .alert {
-            padding: 1rem;
-            border-radius: 0.375rem;
-            margin-bottom: 1rem;
-        }
-
-        .alert-success {
-            background-color: #d1e7dd;
-            color: #0f5132;
-            border: 1px solid #badbcc;
-        }
-
-        .alert-error {
-            background-color: #f8d7da;
-            color: #842029;
-            border: 1px solid #f5c2c7;
-        }
-
-        .alert-info {
-            background-color: #cfe2ff;
-            color: #084298;
-            border: 1px solid #b6d4fe;
-        }
-
-        @media (max-width: 768px) {
-            .container-wrapper {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                padding: 1rem;
-            }
-
-            .sidebar-menu {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .navbar-menu {
-                gap: 1rem;
-            }
-
-            .main-content {
-                padding: 1rem;
-            }
-        }
+        .status-emerald { background: #d1fae5; color: #065f46; }
+        .status-amber { background: #fef3c7; color: #92400e; }
+        .status-red { background: #fee2e2; color: #991b1b; }
     </style>
 </head>
 
-<body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="navbar-title">🌱 EcoBank Petugas</div>
-        <div class="navbar-menu">
-            <a href="{{ route('petugas.dashboard') }}">Dashboard</a>
-            <a href="{{ route('petugas.profile') }}">Profil</a>
-            <div class="navbar-user">
-                <span>{{ auth()->user()->name }}</span>
-                <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                    @csrf
-                    <button type="submit" class="logout-btn">Logout</button>
-                </form>
-            </div>
-        </div>
-    </nav>
+<body class="antialiased text-slate-800">
 
-    <div class="container-wrapper">
+    <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-menu">
-                <a href="{{ route('petugas.dashboard') }}" class="@if(Route::currentRouteName() === 'petugas.dashboard') active @endif">
-                    📊 Dashboard
+        <aside class="w-64 bg-[#E8F9EE] flex flex-col fixed h-full z-50 border-r border-emerald-100/30">
+            <div class="p-6 flex items-center gap-3 mt-2">
+                <div class="w-10 h-10 bg-[#124934] rounded-xl flex items-center justify-center text-white shadow-md">
+                    <i class="fa-solid fa-users-gear text-xl"></i>
+                </div>
+                <div>
+                    <span class="text-2xl font-extrabold tracking-tight text-[#124934] block">EcoBank</span>
+                    <span class="text-[10px] font-bold text-[#52B788] uppercase tracking-wider block -mt-1">Petugas Portal</span>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 mt-4 space-y-1 overflow-y-auto text-slate-700">
+                <a href="{{ route('petugas.dashboard') }}" class="{{ Request::routeIs('petugas.dashboard') ? 'sidebar-active' : 'hover:bg-emerald-100/50' }} flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm font-medium">
+                    <i class="fa-solid fa-chart-pie w-5 text-center"></i> Dashboard
                 </a>
-                <a href="{{ route('petugas.setoran.index') }}" class="@if(Route::currentRouteName() === 'petugas.setoran.index') active @endif">
-                    📦 Setoran Sampah
+                <a href="{{ route('petugas.setoran.index') }}" class="{{ Request::routeIs('petugas.setoran.index') ? 'sidebar-active' : 'hover:bg-emerald-100/50' }} flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm font-medium">
+                    <i class="fa-solid fa-weight-scale w-5 text-center"></i> Catat Setoran
                 </a>
-                <a href="{{ route('petugas.penjemputan.index') }}" class="@if(Route::currentRouteName() === 'petugas.penjemputan.index') active @endif">
-                    🚚 Penjemputan
+                <a href="{{ route('petugas.penjemputan.index') }}" class="{{ Request::routeIs('petugas.penjemputan.index') ? 'sidebar-active' : 'hover:bg-emerald-100/50' }} flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm font-medium">
+                    <i class="fa-solid fa-truck-ramp-box w-5 text-center"></i> Penjemputan
                 </a>
-                <a href="{{ route('petugas.riwayat') }}" class="@if(Route::currentRouteName() === 'petugas.riwayat') active @endif">
-                    📋 Riwayat
+                <a href="{{ route('petugas.riwayat') }}" class="{{ Request::routeIs('petugas.riwayat') ? 'sidebar-active' : 'hover:bg-emerald-100/50' }} flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm font-medium">
+                    <i class="fa-solid fa-receipt w-5 text-center"></i> Riwayat Tugas
                 </a>
-                <hr style="border-color: rgba(255,255,255,0.2); margin: 1rem 0;">
-                <a href="{{ route('petugas.profile') }}" class="@if(Route::currentRouteName() === 'petugas.profile') active @endif">
-                    👤 Profil Saya
-                </a>
+            </nav>
+
+            <!-- User Profile Card -->
+            <div class="p-4 m-4 bg-emerald-50 rounded-2xl border border-emerald-100/50">
+                <div class="flex items-center gap-3 mb-3">
+                    <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=124934&color=fff" 
+                         class="w-9 h-9 rounded-xl shadow-sm object-cover border border-emerald-600/10" 
+                         alt="Petugas Avatar">
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xs font-bold text-slate-900 truncate">{{ Auth::user()->name }}</p>
+                        <p class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Petugas Lapangan</p>
+                    </div>
+                </div>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="w-full flex items-center justify-center gap-2 py-2 bg-white hover:bg-red-50 text-red-600 rounded-xl text-xs font-bold transition-all shadow-sm border border-red-50 cursor-pointer">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar
+                    </button>
+                </form>
             </div>
         </aside>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Page Header -->
-            <div class="page-header">
-                <h1 class="page-title">@yield('page_title', 'Petugas')</h1>
-                <p class="page-subtitle">@yield('page_subtitle', 'Kelola tugas-tugas operasional')</p>
-            </div>
+        <!-- Content Area -->
+        <div class="flex-1 ml-64 flex flex-col">
+            <header class="flex justify-between items-center bg-white border-b border-slate-100 px-10 py-5 sticky top-0 z-40 shadow-xs">
+                <div>
+                    <h2 class="text-sm font-bold text-[#124934] tracking-wide flex items-center gap-2">
+                        <span class="w-1.5 h-3.5 bg-[#124934] rounded-xs inline-block"></span>
+                        @yield('page_title', 'Petugas')
+                    </h2>
+                </div>
 
-            <!-- Alerts -->
-            @if ($errors->any())
-            <div class="alert alert-error">
-                <strong>Terjadi kesalahan!</strong>
-                <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
-                    @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-            @endif
+                <div class="flex items-center gap-4">
+                    <div style="font-size: 0.8rem; color: #64748b; font-weight: 600;">
+                        {{ now()->format('l, d F Y') }}
+                    </div>
+                    <a href="{{ route('petugas.profile') }}" class="w-9 h-9 flex items-center justify-center bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-emerald-600 hover:border-emerald-100 shadow-xs transition-all cursor-pointer">
+                        <i class="fa-solid fa-user-gear text-xs"></i>
+                    </a>
+                </div>
+            </header>
 
-            @if (session('success'))
-            <div class="alert alert-success">
-                ✓ {{ session('success') }}
-            </div>
-            @endif
-
-            @if (session('error'))
-            <div class="alert alert-error">
-                ✗ {{ session('error') }}
-            </div>
-            @endif
-
-            <!-- Page Content -->
-            @yield('content')
-        </main>
+            <main class="p-10 flex-1">
+                @if(session('info'))
+                <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6 text-sm text-blue-800 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>{{ session('info') }}</span>
+                </div>
+                @endif
+                
+                @if(session('success'))
+                <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4 mb-6 text-sm text-emerald-800 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>{{ session('success') }}</span>
+                </div>
+                @endif
+                
+                @yield('content')
+            </main>
+        </div>
     </div>
 
-    <script>
-        // Auto-hide alerts after 5 seconds
-        document.querySelectorAll('.alert').forEach(alert => {
-            setTimeout(() => {
-                alert.style.transition = 'opacity 0.3s';
-                alert.style.opacity = '0';
-                setTimeout(() => alert.remove(), 300);
-            }, 5000);
-        });
-    </script>
 </body>
 
 </html>
